@@ -65,7 +65,7 @@ namespace NS1 {
                    continue;
                 }
                 else {
-                   Create_Node(&matrix, item, i, j);
+                   Create_Node(matrix, item, i, j);
                 }
             }
         }
