@@ -2,9 +2,9 @@
 #include "Prog 1.h"
 
 namespace NS1 {
-    void Create_Node(struct Node** matrix, int element, int row_index, int column_index) {
+    void Create_Node(struct Node*& matrix, int element, int row_index, int column_index) {
         struct Node *temp, *rows;
-        temp = *matrix;
+        temp = matrix;
         
         if (!temp) {
            try {
@@ -18,7 +18,7 @@ namespace NS1 {
            temp->row = row_index;
            temp->column = column_index;
            temp->next = nullptr;
-           *matrix = temp;
+           matrix = temp;
         }
         else {
            while (temp->next != nullptr) {
