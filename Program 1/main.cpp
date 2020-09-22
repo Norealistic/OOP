@@ -12,7 +12,7 @@ int main() {
        std::cout << "Incorrect data detected!" << std::endl;
        return 1;
     }
-    Print_Matrix("Sourced matrix:", arr, m, n);
+    Print_Matrix("Non-null elements of the matrix:", arr, m, n);
     res = Create_Vector(arr, m, n);
     if (!res) {
        std::cout << "Error in allocating memory!" << std::endl;
