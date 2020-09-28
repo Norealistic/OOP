@@ -7,14 +7,12 @@
 using namespace NS2;
 
 TEST(Strophoid_Constructor, Default_Constructor){
-    Strophoid strophoid;
-    ASSERT_NO_THROW(strophoid);
+    ASSERT_NO_THROW(Strophoid strophoid);
     ASSERT_EQ(0, strophoid.Get_a());
 }
 
 TEST(Strophoid_Constructor, Initial_Constructor){
-    Strophoid strophoid_1(4);
-    ASSERT_NO_THROW(strophoid_1);
+    ASSERT_NO_THROW(Strophoid strophoid_1(4));
     ASSERT_EQ(4, strophoid.Get_a());
     ASSERT_ANY_THROW(Strophoid strophoid_2(3));
     ASSERT_ANY_THROW(Strophoid strophoid_3(-2))
