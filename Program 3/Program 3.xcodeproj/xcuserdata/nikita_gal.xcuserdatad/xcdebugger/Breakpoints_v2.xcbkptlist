@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "104AAD05-7E33-4AA1-A32F-D095D48F7F29"
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "5856011F-039C-4926-95A7-196A99BA9B48"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Program 3/BigInt.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "59"
+            endingLineNumber = "59"
+            landmarkName = "BigInt::BigInt(str)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "5856011F-039C-4926-95A7-196A99BA9B48 - 26bbe08dc0f8975f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "NS3::BigInt::BigInt(char const*)"
+                  moduleName = "Program 3"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nikita_gal/Desktop/OOP/Program%203/Program%203/BigInt.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "61"
+                  endingLineNumber = "61"
+                  offsetFromSymbolStart = "23">
+               </Location>
+               <Location
+                  uuid = "5856011F-039C-4926-95A7-196A99BA9B48 - 26bbe08dc0f8975f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "NS3::BigInt::BigInt(char const*)"
+                  moduleName = "Program 3"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nikita_gal/Desktop/OOP/Program%203/Program%203/BigInt.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "59"
+                  endingLineNumber = "59"
+                  offsetFromSymbolStart = "20">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "8A13ED34-00FA-4709-A4FA-8EC58CB905FA"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Program 3/BigInt.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "86"
+            endingLineNumber = "86"
+            landmarkName = "BigInt::BigInt(str)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>
