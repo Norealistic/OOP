@@ -24,7 +24,7 @@ namespace NS2{
     }
 
     double Strophoid::Get_y_coordinate(double x) const{
-        return x * sqrt((a + x) / (a - x));
+        return (x * sqrt( (a + x) / (a - x) ) );
     }
 
     double Strophoid::Get_polar_distance(double t) const{
