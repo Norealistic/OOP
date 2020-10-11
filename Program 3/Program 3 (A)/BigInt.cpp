@@ -206,7 +206,7 @@ namespace NS3 {
         return c;
     }
 
-    BigInt& BigInt::Add(const BigInt& BSlg,int sgn) {
+    BigInt& BigInt::Add(const BigInt& BSlg, int sgn) {
         try {
             char slg1[MaxLen+1];
             bool prInd = ((num[0] == BSlg.num[0] && sgn == 0) || (num[0] != BSlg.num[0] && sgn != 0));
