@@ -27,3 +27,4 @@
 
 #Custom
 *.DS_Store 
+*.xcodeproj
