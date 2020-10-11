@@ -27,4 +27,5 @@
 
 #Custom
 *.DS_Store 
-*.xcodeproj
+*.xcodeproj/
+DerivedData/
