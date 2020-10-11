@@ -41,9 +41,6 @@
 		87A5F6DA25277E52006C1D0A /* BigInt.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BigInt.h; sourceTree = "<group>"; };
 		87A5F6DB25278B26006C1D0A /* BigInt.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BigInt.cpp; sourceTree = "<group>"; };
 		87A5F72125338F7F006C1D0A /* libBigInt.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libBigInt.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		87A5F72325338F7F006C1D0A /* BigInt.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BigInt.hpp; sourceTree = "<group>"; };
-		87A5F72525338F7F006C1D0A /* BigIntPriv.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BigIntPriv.hpp; sourceTree = "<group>"; };
-		87A5F72725338F7F006C1D0A /* BigInt.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BigInt.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,7 +65,6 @@
 			isa = PBXGroup;
 			children = (
 				87A5F6D225277DE0006C1D0A /* Program 3 (A) */,
-				87A5F72225338F7F006C1D0A /* BigInt */,
 				87A5F6D125277DE0006C1D0A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -90,16 +86,6 @@
 				87A5F6D325277DE0006C1D0A /* main.cpp */,
 			);
 			path = "Program 3 (A)";
-			sourceTree = "<group>";
-		};
-		87A5F72225338F7F006C1D0A /* BigInt */ = {
-			isa = PBXGroup;
-			children = (
-				87A5F72325338F7F006C1D0A /* BigInt.hpp */,
-				87A5F72525338F7F006C1D0A /* BigIntPriv.hpp */,
-				87A5F72725338F7F006C1D0A /* BigInt.cpp */,
-			);
-			path = BigInt;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
