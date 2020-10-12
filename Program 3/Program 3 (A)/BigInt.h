@@ -13,8 +13,8 @@ namespace NS3 {
     public:
         BigInt();
         BigInt(std::istream&);
-        BigInt(long num);
-        BigInt(int num);
+        explicit BigInt(long num);
+        explicit BigInt(int num);
         BigInt(const char* );
         BigInt(const BigInt&);
         std::istream& Input(std::istream& i = std::cin);
