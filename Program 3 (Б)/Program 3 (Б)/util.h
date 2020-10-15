@@ -7,7 +7,7 @@ namespace NS3 {
         std::cin>>a;
         if (!std::cin.good()){
             return -1;
-        }
+       }
         return 1;
     }
 }

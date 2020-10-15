@@ -14,7 +14,6 @@ namespace NS3 {
         BigInt(long a);
         BigInt(int a);
         BigInt(const char* str);
-     
         const BigInt operator ~ () const;
         friend std::istream& operator >> (std::istream& i,BigInt&);
         friend std::ostream& operator << (std::ostream& c, const BigInt&);
