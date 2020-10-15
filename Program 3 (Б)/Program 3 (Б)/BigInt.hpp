@@ -8,7 +8,9 @@ namespace NS3 {
         char num[MaxLen + 1];
     public:
         BigInt();
-        BigInt(std::istream& i) :BigInt() { i >> *this; };
+        BigInt(std::istream& i) :BigInt(){
+            i >> *this;
+        };
         BigInt(long a);
         BigInt(int a);
         BigInt(const char* str);
