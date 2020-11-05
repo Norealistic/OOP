@@ -275,12 +275,12 @@ namespace NS3 {
     }
 
     BigInt& BigInt::operator=(BigInt&& ob)  {
-        if (num != nullptr) {
+     //   if (num != nullptr) {
             delete[]num;
             num = ob.num;
             len = ob.len;
             ob.num = nullptr;
-        }
+        
         return *this;
     }
 
