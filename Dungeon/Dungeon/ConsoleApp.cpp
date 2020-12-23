@@ -6,15 +6,15 @@ namespace Dungeon{
 void InitLevels(){
     std::vector <CatacombsLevel> ::iterator it = level_list.begin();
     level_numbers number = LEVEL_1;
-    do{
+    for (int i = 0; i<3; i++){
         it->SetLevel(number);
         number = (level_numbers)((int)(number + 1));
         it++;
-    }while(number != LEVEL_1);
+    }
 }
 
 void UploadCharacters(CatacombsLevel& level){
-    srand(time(0));
+    srand((unsigned int)time(0));
     std::vector <Enemy> sub_enemies = level.GetEnemies();
     std::vector <Enemy> ::iterator this_enemy = sub_enemies.begin();
     User.current_level = (level_numbers)level.GetLevel();
@@ -105,16 +105,16 @@ void UpgradeCharacteristics(struct PlayerStatement &user){
 }
 
 void PotionsMenu(struct PlayerStatement &user){
-    std::vector <Potion> potion_list = user.player.PotionList();
-    std::vector <Potion> ::iterator it = potion_list.begin();
+    std::vector <Potion *> potion_list = user.player.PotionList();
+    std::vector <Potion *> ::iterator it = potion_list.begin();
     char number = 'A';
     for (int i = 0; i < potion_list.size(); i++){
         std::string name;
-        if (it->GetModificator().type == STRENGTH) name = "strength";
-        if (it->GetModificator().type == AGILITY) name = "agility";
-        if (it->GetModificator().type == STAMINA) name = "stamina";
-        if (it->GetModificator().type == HEALTH) name = "health";
-        std::cout << number << ". " << name << ", " << it->GetModificator().current << std::endl;
+        if ((*it)->GetModificator().type == STRENGTH) name = "strength";
+        if ((*it)->GetModificator().type == AGILITY) name = "agility";
+        if ((*it)->GetModificator().type == STAMINA) name = "stamina";
+        if ((*it)->GetModificator().type == HEALTH) name = "health";
+        std::cout << number << ". " << name << ", " << (*it)->GetModificator().current << std::endl;
         number = number+1;
     }
 }
@@ -128,16 +128,21 @@ void DrinkPotion(struct PlayerStatement &user){
         choice = getchar();
         fflush(stdin);
     }while (choice >= 65 && choice <= 90);
-    std::vector <Potion> potion_list = user.player.PotionList();
+    std::vector <Potion *> potion_list = user.player.PotionList();
     int number = (int)(choice - 64);
-    Potion potion = potion_list[number];
-    user.player.DrinkPotion(potion);
+    Potion *potion = potion_list[number];
+    user.player.DrinkPotion(*potion);
 }
 
 void StepUp(struct PlayerStatement &user){
     couple point = user.current_point;
     user.current_point.y += dy;
     level_numbers level = user.current_level;
+    Case place = level_list[level].GetCase(user.current_point);
+    if (place.GetItem()){
+        GetItem(user);
+        level_list[level].SetCase(place, user.current_point);
+    }
     level_list[level].SetPointType(point, FLOOR, level, nullptr);
     level_list[level].SetPointType(user.current_point, PLAYER, level, nullptr);
 }
@@ -146,6 +151,11 @@ void StepDown(struct PlayerStatement &user){
     couple point = user.current_point;
     user.current_point.y -= dy;
     level_numbers level = user.current_level;
+    Case place = level_list[level].GetCase(user.current_point);
+    if (place.GetItem()){
+        GetItem(user);
+        level_list[level].SetCase(place, user.current_point);
+    }
     level_list[level].SetPointType(point, FLOOR, level, nullptr);
     level_list[level].SetPointType(user.current_point, PLAYER, level, nullptr);
 }
@@ -155,6 +165,11 @@ void StepRight(struct PlayerStatement &user){
     couple point = user.current_point;
     user.current_point.x += dx;
     level_numbers level = user.current_level;
+    Case place = level_list[level].GetCase(user.current_point);
+    if (place.GetItem()){
+        GetItem(user);
+        level_list[level].SetCase(place, user.current_point);
+    }
     level_list[level].SetPointType(point, FLOOR, level, nullptr);
     level_list[level].SetPointType(user.current_point, PLAYER, level, nullptr);
 }
@@ -164,6 +179,11 @@ void StepLeft(struct PlayerStatement &user){
     couple point = user.current_point;
     user.current_point.x -= dx;
     level_numbers level = user.current_level;
+    Case place = level_list[level].GetCase(user.current_point);
+    if (place.GetItem()){
+        GetItem(user);
+        level_list[level].SetCase(place, user.current_point);
+    }
     level_list[level].SetPointType(point, FLOOR, level, nullptr);
     level_list[level].SetPointType(user.current_point, PLAYER, level, nullptr);
 }
@@ -236,7 +256,7 @@ void MakeStep(struct PlayerStatement &user){
     do{
         choice = getchar();
         fflush(stdin);
-    }while(choice != 'a' || choice != 'w' || choice != 's' || choice != 'd' || choice != 'o' || choice != 'c' || choice != '<' || choice != '>' || choice != '.');
+    }while(choice != 'a' && choice != 'w' && choice != 's' && choice != 'd' && choice != 'o' && choice != 'c' && choice != '<' && choice != '>' && choice != '.');
     switch(choice){
         default: break;
         case 'a':{
@@ -277,24 +297,24 @@ void MakeStep(struct PlayerStatement &user){
 
 void WeaponMenu(struct PlayerStatement &user){
     std::cout << "There are..." << std::endl;
-    std::vector <Weapon> weapon = user.player.WeaponList();
-    std::vector <Weapon> ::iterator it = weapon.begin();
+    std::vector <Weapon *> weapon = user.player.WeaponList();
+    std::vector <Weapon *> ::iterator it = weapon.begin();
     while (it != weapon.end()){
         std::string info = "    ";
-        switch(it->GetName()){
+        switch((*it)->GetName()){
             default: break;
             case WEAPON:{
-                info += str_item_names[WEAPON] + ", " + std::to_string((int)it->GetDamageValue());
+                info += str_item_names[WEAPON] + ", " + std::to_string((int)(*it)->GetDamageValue());
                 break;
             }
             case ENCHANTED_WEAPON:{
-                EnchantedWeapon *ench = dynamic_cast<EnchantedWeapon*>(&(*it));
+                EnchantedWeapon *ench = dynamic_cast<EnchantedWeapon*>((*it));
                 info += str_item_names[ENCHANTED_WEAPON] + ", " + str_enemy_names[ench->GetEnemyTypeUp()] + ", " + std::to_string((int)(ench->GetDamageValue()*ench->GetIndex())) + ", " + str_enemy_names[ench->GetEnemyTypeDown()] + ", " +
                 std::to_string((int)(ench->GetDamageValue()/ench->GetIndex()));
                 break;
             }
             case ARTEFACT_WEAPON:{
-                ArtefactWeapon *art = dynamic_cast<ArtefactWeapon*>(&(*it));
+                ArtefactWeapon *art = dynamic_cast<ArtefactWeapon*>((*it));
                 info += str_item_names[ARTEFACT_WEAPON] + ", " + std::to_string((int)art->GetDamageValue()) + ", ";
                 std::vector <characteristic> list = art->GetModificators();
                 std::vector <characteristic> ::iterator sub_it = list.begin();
@@ -314,17 +334,17 @@ void WeaponMenu(struct PlayerStatement &user){
 void ArmorMenu(struct PlayerStatement &user){
     std::cout << "There are..." << std::endl;
     std::vector <Armor *> armor = user.player.ArmorList();
-    std::vector <Armor> ::iterator it = armor.begin();
+    std::vector <Armor *> ::iterator it = armor.begin();
     while(it != armor.end()){
         std::string info = "    ";
-        switch(it->GetName()){
+        switch((*it)->GetName()){
             default: break;
             case ARMOR:{
-                info += str_item_names[ARMOR] + ", " + std::to_string((int)it->GetDefenceValue()) + ", " + str_armor_types[it->GetType()];
+                info += str_item_names[ARMOR] + ", " + std::to_string((int)(*it)->GetDefenceValue()) + ", " + str_armor_types[(*it)->GetType()];
                 break;
             }
             case ARTEFACT_ARMOR:{
-                ArtefactArmor *art = dynamic_cast<ArtefactArmor*>(&(*it));
+                ArtefactArmor *art = dynamic_cast<ArtefactArmor*>((*it));
                 info += str_item_names[ARTEFACT_ARMOR] + ", " + std::to_string((int)art->GetDefenceValue()) + ", ";
                 std::vector <characteristic> list = art->GetModificators();
                 std::vector <characteristic> ::iterator sub_it = list.begin();
@@ -351,6 +371,109 @@ void PlayerInfo(struct PlayerStatement &user){
     while (it != feature_table.end()){
         std::cout << str_feature_names[it->type] << ": " << it->current << std::endl;
     }
+    Weapon* weapon = user.player.GetWeapon();
+    switch (weapon->GetName()){
+        default: break;
+        case WEAPON:{
+            std::cout << str_item_names[WEAPON] << ": " << weapon->GetDamageValue() << std::endl;
+            break;
+        }
+        case ENCHANTED_WEAPON:{
+            EnchantedWeapon *ench = dynamic_cast<EnchantedWeapon*>(weapon);
+            std::cout << str_item_names[ENCHANTED_WEAPON] << ": " << str_enemy_names[ench->GetEnemyTypeUp()] << ", " << ench->GetIndex()*ench->GetDamageValue() << ", " << str_enemy_names[ench->GetEnemyTypeDown()] << ", " << ench->GetDamageValue()/ench->GetIndex();
+            break;
+        }
+        case ARTEFACT_WEAPON:{
+            ArtefactWeapon *art = dynamic_cast<ArtefactWeapon*>(weapon);
+            std::cout << str_item_names[ARTEFACT_WEAPON] << ": " << art->GetDamageValue() << std::endl;
+            std::vector <characteristic> list = art->GetModificators();
+            std::vector <characteristic> ::iterator sub_it = list.begin();
+            while (sub_it != list.end()){
+                std::cout << "  " << str_feature_names[sub_it->type] << ": +" << sub_it->current << std::endl;
+                sub_it++;
+            }
+            break;
+        }
     }
+    MyVector <Armor> armor = user.player.GetArmor();
+    MyIterator <Armor> my_it = armor.Begin();
+    for(int i = 0; i < armor.current_size(); i++, my_it++){
+        switch((*my_it)->GetName()){
+            default: break;
+            case ARMOR:{
+                std::cout << str_item_names[ARMOR] << ": " << (*my_it)->GetDefenceValue() << ", " << str_armor_types[(*my_it)->GetType()] << std::endl;
+                break;
+            }
+            case ARTEFACT_ARMOR:{
+                std::cout << str_item_names[ARMOR] << ": " << (*my_it)->GetDefenceValue() << ", " << str_armor_types[(*my_it)->GetType()] << std::endl;
+                ArtefactArmor *art = dynamic_cast<ArtefactArmor*>(*my_it);
+                std::vector <characteristic> modificators = art->GetModificators();
+                std::vector <characteristic> ::iterator mod = modificators.begin();
+                while (mod != modificators.end()){
+                    std::cout << "  " << str_feature_names[mod->type] << ": +" << mod->current << std::endl;
+                    mod++;
+                }
+            }
+        }
+    }
+    std::cout << "Key quantity: " << user.player.GetKeyNumber() << std::endl;
+}
+
+    void AttackEmeny(struct PlayerStatement &user, struct EnemyStatement &enemy){
+        characteristic enemy_health = {HEALTH, 0, 0};
+        characteristic player_health = {HEALTH, 0, 0};
+        do{
+            user.player.GenerateDamage(enemy.enemy);
+            enemy.enemy.GenerateDamage(user.player);
+            std::vector <characteristic> enemys = enemy.enemy.GetFeatures();
+            enemy_health = enemys[0];
+            std::vector <characteristic> players = user.player.GetFeatures();
+            std::vector <characteristic> ::iterator it = players.begin();
+            while (it->type != HEALTH) it++;
+            player_health = *it;
+        }while(player_health.current != 0 && enemy_health.current != 0);
+        if (enemy_health.current == 0){
+            std::vector <Item *> items = enemy.enemy.GetItems();
+            std::vector <Item *> ::iterator it = items.begin();
+            couple point = enemy.current_point;
+            Case& cassse = level_list[enemy.current_level].GetCase(point);
+            cassse.SetItem((*it));
+            level_list[enemy.current_level].SetCase(cassse, point);
+            level_list[enemy.current_level].SetPointType(point, FLOOR, enemy.current_level, nullptr);
+        }
+        if (player_health.current == 0)
+            throw "I'm dead";
+    }
+
+    void GetItem(struct PlayerStatement &user){
+        Case& current = level_list[user.current_level].GetCase(user.current_point);
+        user.player.SetItem(current.GetItem());
+        current.SetItem(nullptr);
+    }
+
+    void OpenChest(struct PlayerStatement &user){
+        Case place;
+        couple points[4] = {{user.current_point.x, user.current_point.y+dy}, {user.current_point.x, user.current_point.y-dy}, {user.current_point.x+dx, user.current_point.y}, {user.current_point.x-dx, user.current_point.y}};
+        couple *current = points;
+        do{
+            place = level_list[user.current_level].GetCase(*current);
+            current++;
+        }while(current && !place.GetChest());
+        try{
+            place.GetChest()->OpenAttempt(user.player);
+        }
+        catch(const std::invalid_argument &er){
+            std::cout << er.what() << std::endl;
+            return;
+        }
+        Item *item = place.GetChest()->GetItem();
+        place.SetChest(nullptr);
+        place.SetItem(item);
+        level_list[user.current_level].SetCase(place, *current);
+        level_list[user.current_level].SetPointType(*current, FLOOR, user.current_level, nullptr);
+    }
+
+
+
 }
 

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		87541F18259239E300D835A9 /* ConsoleApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87541F16259239E300D835A9 /* ConsoleApp.cpp */; };
+		87541F222593C2AE00D835A9 /* test.m in Sources */ = {isa = PBXBuildFile; fileRef = 87541F212593C2AE00D835A9 /* test.m */; };
 		877251A8257E8C2B005D406E /* Enemy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 877251A7257E8C2B005D406E /* Enemy.cpp */; };
 		877251AA257E8D3A005D406E /* Character.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 877251A9257E8D3A005D406E /* Character.cpp */; };
 		877251AD257E91F7005D406E /* Armor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 877251AC257E91F7005D406E /* Armor.cpp */; };
@@ -18,6 +19,16 @@
 		879718F2256AA1D700B35BB2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 879718F1256AA1D700B35BB2 /* main.cpp */; };
 		87AA547A258BA0F5004E7EE4 /* Case.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 877251B7257EA204005D406E /* Case.cpp */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		87541F3A2593C66F00D835A9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 879718E6256AA1D700B35BB2 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 879718ED256AA1D700B35BB2;
+			remoteInfo = Dungeon;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		879718EC256AA1D700B35BB2 /* CopyFiles */ = {
@@ -38,6 +49,10 @@
 		874CF5AF256EE9F00085C2A7 /* Potion.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Potion.h; sourceTree = "<group>"; };
 		87541F16259239E300D835A9 /* ConsoleApp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ConsoleApp.cpp; sourceTree = "<group>"; };
 		87541F17259239E300D835A9 /* ConsoleApp.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ConsoleApp.hpp; sourceTree = "<group>"; };
+		87541F1A2593684C00D835A9 /* MyIterator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyIterator.h; sourceTree = "<group>"; };
+		87541F1F2593C2AE00D835A9 /* test.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = test.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		87541F212593C2AE00D835A9 /* test.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = test.m; sourceTree = "<group>"; };
+		87541F232593C2AE00D835A9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		877251A7257E8C2B005D406E /* Enemy.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Enemy.cpp; sourceTree = "<group>"; };
 		877251A9257E8D3A005D406E /* Character.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Character.cpp; sourceTree = "<group>"; };
 		877251AB257E8E86005D406E /* Artefact_Armor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Artefact_Armor.h; sourceTree = "<group>"; };
@@ -64,6 +79,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		87541F1C2593C2AE00D835A9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		879718EB256AA1D700B35BB2 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -74,12 +96,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		87541F202593C2AE00D835A9 /* test */ = {
+			isa = PBXGroup;
+			children = (
+				87541F212593C2AE00D835A9 /* test.m */,
+				87541F232593C2AE00D835A9 /* Info.plist */,
+			);
+			path = test;
+			sourceTree = "<group>";
+		};
 		879718E5256AA1D700B35BB2 = {
 			isa = PBXGroup;
 			children = (
 				879718F0256AA1D700B35BB2 /* Dungeon */,
+				87541F202593C2AE00D835A9 /* test */,
 				879718EF256AA1D700B35BB2 /* Products */,
-				87D39AF52588C54B00F64A55 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -87,6 +118,7 @@
 			isa = PBXGroup;
 			children = (
 				879718EE256AA1D700B35BB2 /* Dungeon */,
+				87541F1F2593C2AE00D835A9 /* test.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -121,21 +153,33 @@
 				87821AE02575152A00099DCD /* Artefact_Weapon.h */,
 				877251AB257E8E86005D406E /* Artefact_Armor.h */,
 				870410EF258647150058C67F /* CustomVector.hpp */,
+				87541F1A2593684C00D835A9 /* MyIterator.h */,
 				870410F125864D420058C67F /* Maps.h */,
 			);
 			path = Dungeon;
 			sourceTree = "<group>";
 		};
-		87D39AF52588C54B00F64A55 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		87541F1E2593C2AE00D835A9 /* test */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 87541F242593C2AE00D835A9 /* Build configuration list for PBXNativeTarget "test" */;
+			buildPhases = (
+				87541F1B2593C2AE00D835A9 /* Sources */,
+				87541F1C2593C2AE00D835A9 /* Frameworks */,
+				87541F1D2593C2AE00D835A9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				87541F3B2593C66F00D835A9 /* PBXTargetDependency */,
+			);
+			name = test;
+			productName = test;
+			productReference = 87541F1F2593C2AE00D835A9 /* test.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		879718ED256AA1D700B35BB2 /* Dungeon */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 879718F5256AA1D700B35BB2 /* Build configuration list for PBXNativeTarget "Dungeon" */;
@@ -163,6 +207,9 @@
 				LastUpgradeCheck = 1160;
 				ORGANIZATIONNAME = "Никита";
 				TargetAttributes = {
+					87541F1E2593C2AE00D835A9 = {
+						CreatedOnToolsVersion = 11.6;
+					};
 					879718ED256AA1D700B35BB2 = {
 						CreatedOnToolsVersion = 11.6;
 					};
@@ -182,11 +229,30 @@
 			projectRoot = "";
 			targets = (
 				879718ED256AA1D700B35BB2 /* Dungeon */,
+				87541F1E2593C2AE00D835A9 /* test */,
 			);
 		};
 /* End PBXProject section */
 
+/* Begin PBXResourcesBuildPhase section */
+		87541F1D2593C2AE00D835A9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
+		87541F1B2593C2AE00D835A9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				87541F222593C2AE00D835A9 /* test.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		879718EA256AA1D700B35BB2 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -206,7 +272,49 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		87541F3B2593C66F00D835A9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 879718ED256AA1D700B35BB2 /* Dungeon */;
+			targetProxy = 87541F3A2593C66F00D835A9 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		87541F252593C2AE00D835A9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = test/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.16;
+				PRODUCT_BUNDLE_IDENTIFIER = mephi.test;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		87541F262593C2AE00D835A9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = test/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.16;
+				PRODUCT_BUNDLE_IDENTIFIER = mephi.test;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		879718F3256AA1D700B35BB2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -335,6 +443,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		87541F242593C2AE00D835A9 /* Build configuration list for PBXNativeTarget "test" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				87541F252593C2AE00D835A9 /* Debug */,
+				87541F262593C2AE00D835A9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		879718E9256AA1D700B35BB2 /* Build configuration list for PBXProject "Dungeon" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

@@ -1,15 +1,21 @@
 #include <iostream>
-#include "Dungeon_Level.h"
-#include "Maps.h"
+#include "ConsoleApp.hpp"
 
 using namespace Dungeon;
 
-
-int main() {
-    Case caze;
-    CatacombsLevel level(1);
-    level.SetLevel(LEVEL_1);
-    std::cout << "Hello, World!\n";
+int main(){
+    bool flag = false;
+    
+    InitLevels();
+    do{
+        try{
+            map_output(User.current_level);
+            MakeStep(User);
+        }
+        catch (std::string error){
+            std::cout << error << std::endl;
+            flag = true;
+        }
+    }while(!flag);
     return 0;
 }
-

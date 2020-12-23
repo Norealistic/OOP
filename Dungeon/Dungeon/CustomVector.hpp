@@ -1,4 +1,5 @@
 #include <iostream>
+#include "MyIterator.h"
 
 namespace Dungeon {
 
@@ -34,37 +35,13 @@ class MyVector{
         }
     
     
-    
-    
-    class MyIterator {
-        private:
-            T *ptr;
-        
-        public:
-            MyIterator() { ptr = nullptr; }
-            MyIterator(T *p) { ptr = p; }
-            
-            T *operator + (int n)  { return (ptr + n); }
-            T *operator - (int n) { return (ptr - n); }
-            
-            T *operator ++ (int) { return ptr++; }
-            T *operator -- (int) { return ptr--; }
-            T *operator ++ () { return ++ptr; }
-            T *operator -- () { return --ptr; }
-                
-            bool operator != (const MyIterator &it) noexcept { return ptr != it.ptr; }
-            bool operator == (const MyIterator &it) noexcept { return ptr == it.ptr; }
-            T *operator * () noexcept { return ptr; }
-    };
-    
-    
-    MyIterator &Begin(){
-              MyIterator it(&(this->array[0]));
+    MyIterator <T> &Begin(){
+        MyIterator <T> it(&(this->array[0]));
               return it;
           }
     
-    MyIterator &End(){
-        MyIterator it(&(this->array[this->currentsize]));
+    MyIterator <T> &End(){
+        MyIterator <T> it(&(this->array[this->currentsize]));
         return it;
     }
     

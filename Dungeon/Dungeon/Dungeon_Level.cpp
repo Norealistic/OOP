@@ -69,103 +69,104 @@ namespace Dungeon {
     }
 
     void CatacombsLevel::SetLevel(level_numbers level){
-        srand((unsigned int)time(0));
-        this->size = {40, 20};
-        this->case_array.clear();
-        this->case_array.resize(20);//20 строк
-        std::vector <std::vector <Case>> ::iterator it = this->case_array.begin();
-        for (int i = 0; i < 20; i++){
-            it->resize(40);//40 столбцов
-            it++;
-        }
-        it = this->case_array.begin();
-        int i = 1, j = 0;
-        for(;it < this->case_array.end(); it++){
-            std::vector <Case> ::iterator sub_it = it->begin();
-            for (;sub_it < it->end(); sub_it++){
-                couple point = {i,j};
-                if (map_catalog[i].lines[j] == "#"){
-                        this->case_array[point.y].push_back(Case(WALL, point)); ///
-                    break;
-                }
-                else if (map_catalog[i].lines[j] == "+"){
-                    this->case_array[point.y].push_back(Case(CLOSED_DOOR, point));
-                    break;
-                }
-                else if (map_catalog[i].lines[j] == "&"){
-                    Chest *chest = new Chest();
-                    chest->SetLevelNumber((unsigned int)level);
-                    chest->SetNumber(rand()%(int)level + 1);
-                    item_names name;
-                    do{
-                        name = (item_names)(rand()%8 + 2);
-                    }while (name == ARTEFACT);
-                    switch(name){
-                        default:{
-                            Keychain* keychain = new Keychain;
-                            chest->SetItem(keychain);
-                            keychain->~Keychain();
-                            break;
-                        }
-                        case ARMOR:{
-                            Armor* armor = new Armor();
-                            chest->SetItem(armor);
-                            armor->~Armor();
-                            break;
-                        }
-                        case ARTEFACT_ARMOR:{
-                            ArtefactArmor *artefact_armor = new ArtefactArmor;
-                            chest->SetItem(artefact_armor);
-                            artefact_armor->~ArtefactArmor();
-                            break;
-                        }
-                        case WEAPON:{
-                            Weapon *weapon = new Weapon();
-                            chest->SetItem(weapon);
-                            weapon->~Weapon();
-                            break;
-                        }
-                        case ARTEFACT_WEAPON:{
-                            ArtefactWeapon *artefact_weapon = new ArtefactWeapon();
-                            chest->SetItem(artefact_weapon);
-                            artefact_weapon->~ArtefactWeapon();
-                            break;
-                        }
-                        case ENCHANTED_WEAPON:{
-                            EnchantedWeapon *ench_weapon = new EnchantedWeapon();
-                            chest->SetItem(ench_weapon);
-                            ench_weapon->~EnchantedWeapon();
-                            break;
-                        }
-                        case POTION:{
-                            Potion *potion = new Potion();
-                            chest->SetItem(potion);
-                            potion->~Potion();
-                            break;
-                        }
-                    }
-                    this->case_array[point.y].push_back(Case(FLOOR, point));
-                    bool flag = sub_it->SetChest(chest);
-                    if (!flag)
-                        throw std::exception();
-                    break;
-                }
-                else if (map_catalog[i].lines[j] == ">"){
-                    this->case_array[point.y].push_back(Case(STAIRS_DOWN, point));
-                    break;
-                }
-                else if (map_catalog[i].lines[j] == "<"){
-                    this->case_array[point.y].push_back(Case(STAIRS_UP, point));
-                    break;
-                }
-                else{
-                    this->case_array[point.y].push_back(Case(FLOOR, point));
-                    break;
-                }
-                }
-             i++;
+    srand((unsigned int)time(0));
+    this->size = {40, 20};
+    this->case_array.clear();
+    this->case_array.resize(20);//20 строк
+    std::vector <std::vector <Case>> ::iterator it = this->case_array.begin();
+    for (int i = 0; i < 20; i++){
+        it->resize(40);//40 столбцов
+        it++;
+    }
+    it = this->case_array.begin();
+    int i = 0, j = 0;
+    for(;it < this->case_array.end(); it++){
+        std::vector <Case> ::iterator sub_it = it->begin();
+        for (;sub_it < it->end(); sub_it++){
+            couple point = {i,j};
+            if (map_catalog[i].lines[j] == "#"){
+                this->case_array[point.x][point.y] = (Case(WALL, point)); ///
+                break;
             }
+            else if (map_catalog[i].lines[j] == "+"){
+                this->case_array[point.x][point.y] = (Case(CLOSED_DOOR, point));
+                break;
+            }
+            else if (map_catalog[i].lines[j] == "&"){
+                Chest *chest = new Chest();
+                chest->SetLevelNumber((unsigned int)level);
+                chest->SetNumber(rand()%(int)level + 1);
+                item_names name;
+                do{
+                    name = (item_names)(rand()%8 + 2);
+                }while (name == ARTEFACT);
+                switch(name){
+                    default:{
+                        Keychain* keychain = new Keychain;
+                        chest->SetItem(keychain);
+                        keychain->~Keychain();
+                        break;
+                    }
+                    case ARMOR:{
+                        Armor* armor = new Armor();
+                        chest->SetItem(armor);
+                        armor->~Armor();
+                        break;
+                    }
+                    case ARTEFACT_ARMOR:{
+                        ArtefactArmor *artefact_armor = new ArtefactArmor;
+                        chest->SetItem(artefact_armor);
+                        artefact_armor->~ArtefactArmor();
+                        break;
+                    }
+                    case WEAPON:{
+                        Weapon *weapon = new Weapon();
+                        chest->SetItem(weapon);
+                        weapon->~Weapon();
+                        break;
+                    }
+                    case ARTEFACT_WEAPON:{
+                        ArtefactWeapon *artefact_weapon = new ArtefactWeapon();
+                        chest->SetItem(artefact_weapon);
+                        artefact_weapon->~ArtefactWeapon();
+                        break;
+                    }
+                    case ENCHANTED_WEAPON:{
+                        EnchantedWeapon *ench_weapon = new EnchantedWeapon();
+                        chest->SetItem(ench_weapon);
+                        ench_weapon->~EnchantedWeapon();
+                        break;
+                    }
+                    case POTION:{
+                        Potion *potion = new Potion();
+                        chest->SetItem(potion);
+                        potion->~Potion();
+                        break;
+                    }
+                }
+                this->case_array[point.x][point.y] = (Case(FLOOR, point));
+                bool flag = sub_it->SetChest(chest);
+                if (!flag)
+                    throw std::exception();
+                break;
+            }
+            else if (map_catalog[i].lines[j] == ">"){
+                this->case_array[point.x][point.y] = (Case(STAIRS_DOWN, point));
+                break;
+            }
+            else if (map_catalog[i].lines[j] == "<"){
+                this->case_array[point.x][point.y] = (Case(STAIRS_UP, point));
+                break;
+            }
+            else{
+                this->case_array[point.x][point.y] = (Case(FLOOR, point));
+                break;
+            }
+            }
+         i++;
         }
+    }
+
 
     Player* CatacombsLevel::GetPlayer(){
         return this->player;
@@ -202,13 +203,5 @@ namespace Dungeon {
             sub_it->SetType(CLOSED_DOOR);
         else throw std::invalid_argument("It is not a door");
     }
-
-
-    void map_output(level_numbers level){
-        for (int i = 0; i < LINE_QUANTITY; i++)
-            std::cout << map_catalog[level].lines[i] << std::endl;
-    }
-    
-
 
 }
