@@ -2,7 +2,7 @@
 #include "Item.h"
 
 namespace Dungeon{
-class Potion : public virtual Item{
+class Potion : public Item{
     private:
         characteristic modificator;
     public:
@@ -25,6 +25,18 @@ class Potion : public virtual Item{
             this->modificator.current = 0;
             this->modificator.max = 0;
         }
+    
+        bool operator == (Potion& left){
+            if (this->GetName() == left.GetName() && this->modificator.type == left.modificator.type && this->modificator.max == left.modificator.max && this->modificator.current == left.modificator.current)
+                return true;
+            else return false;
+        };
+
+        bool operator != (Potion& left){
+            return !(*this == left);
+        };
+    
+    
     };
 }
 

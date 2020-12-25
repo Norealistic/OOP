@@ -4,7 +4,7 @@
 #include <vector>
 
 namespace Dungeon{
-    class ArtefactArmor : public virtual Armor, public virtual Artefact{
+    class ArtefactArmor : public Armor, public Artefact{
         public:
           ArtefactArmor(){
                this->SetName(ARTEFACT_ARMOR);

@@ -2,7 +2,7 @@
 #include "Weapon.h"
 
 namespace Dungeon{
-    class EnchantedWeapon : public virtual Weapon{
+    class EnchantedWeapon : public Weapon{
     private:
         enemies enemy_type_up;
         enemies enemy_type_down;

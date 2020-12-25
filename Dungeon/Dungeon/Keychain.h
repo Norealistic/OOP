@@ -2,7 +2,7 @@
 #include "Item.h"
 
 namespace Dungeon{
-    class Keychain : public virtual Item{
+    class Keychain : public Item{
     private:
         unsigned int key_number;
     public:

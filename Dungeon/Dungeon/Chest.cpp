@@ -30,7 +30,8 @@ namespace Dungeon{
     }
 
     void Chest::SetItem(Item* item){
-        *(this->item) = *item;
+        this->item = new Item;
+        this->item = item;
     }
 
     unsigned int Chest::GetNumber(){
@@ -46,9 +47,10 @@ namespace Dungeon{
         if (number >= this->GetNumber()){
             number -= this->GetNumber();
             this->locked = false;
-            player.SetItem(this->item);
+            player.SetItem(*(this->item));
         }
         else throw std::invalid_argument("key number is not enough");
     }
+
 
 }

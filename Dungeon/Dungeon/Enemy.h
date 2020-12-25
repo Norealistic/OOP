@@ -3,7 +3,7 @@
 #include <time.h>
 
 namespace Dungeon{
-    class Enemy : virtual public Character{
+    class Enemy : public Character{
        private:
            enemies name;
            unsigned int damage_value;

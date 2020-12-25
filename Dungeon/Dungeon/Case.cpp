@@ -14,7 +14,12 @@ namespace Dungeon{
        }
 
        bool Case::SetChest(Chest* chest){
+           if(chest == nullptr) {
+               DeleteChest();
+               return true;
+           }
            if (!this->item){
+               this->chest = new Chest;
                *(this->chest) = *chest;
                return true;
            }
@@ -26,7 +31,12 @@ namespace Dungeon{
        }
 
        bool Case::SetItem(Item* item){
-           if (!this->chest){
+           if (item == nullptr){
+               DeleteItem();
+               return true;
+           }
+           if (!this->chest || (this->chest && !this->chest->GetLockedStatement())){
+               this->item = new Item;
                *(this->item) = *item;
                return true;
            }

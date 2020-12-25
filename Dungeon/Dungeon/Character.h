@@ -12,7 +12,7 @@ namespace Dungeon{
     private:
         unsigned long xp;
         std::vector <characteristic> feature_table;
-        std::vector <Item *> bag;
+        std::vector <Item> bag;
     public:
         Character();
         unsigned long GetExperience();
@@ -21,17 +21,12 @@ namespace Dungeon{
         void SetFeature(characteristic& feat);
         virtual void GenerateDamage(Character& character);
         void SetDamage(unsigned int damage);
-        std::vector <Item *> GetItems();
+        std::vector <Item> GetItems();
         void DeleteItem(Item& item);
-        void SetItem(Item* item);
+        void SetItem(Item& item);
         void ClearFeatures();
         void ClearBag();
         ~Character();
-        Character& operator= (Character& character){
-            this->xp = character.xp;
-            this->feature_table = character.feature_table;
-            this->bag = character.bag;
-            return *this;
-        } 
+        Character& operator= (Character& character);
     };
 }

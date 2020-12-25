@@ -3,25 +3,39 @@
 
 namespace Dungeon {
 
+/**
+ \brief Шаблонный класс 
+ \author Галацан Никита
+ \version 2.0
+ Шаблонный класс MyVector, который используется для хранение класса Armor
+ */
+
+
 template <class T>
-    
 class MyVector{
     private:
-        T *array;
-        const static unsigned int size = 4;
-        unsigned int currentsize;
+        T *array;         ///<Массив значений
+        const static unsigned int size = 4;  ///<Максимальный размер вектора
+        unsigned int currentsize; ///<Текущий размер вектора
     public:
-        MyVector() : array(nullptr), currentsize(0) {}
+        MyVector() : array(nullptr), currentsize(0) {} ///<Инициализирующий коструктор
      
+     /*!
+      Деструктор
+      */
+    
         ~MyVector(){
             delete[] array;
             currentsize = 0;
         }
         
-        static unsigned int const_size(){return size;}
-        unsigned int current_size(){return currentsize;}
+        static unsigned int const_size(){return size;}  ///<Возвращает максимальный размер вектора
+        unsigned int current_size(){return currentsize;} ///<Возвращает текущий размер вектора
     
-    
+    /*!
+        Перегруженный оператор неравенста
+     \param vec {вектор}
+    */
 
         bool operator!=(MyVector<T> &vec) {
             if (this->size_ == vec.size_) {
@@ -34,17 +48,28 @@ class MyVector{
                 return true;
         }
     
+    /*!
+           Метод, возвращаюций итератор, который указывает на первый элемент массива
+       */
     
     MyIterator <T> &Begin(){
         MyIterator <T> it(&(this->array[0]));
               return it;
           }
     
+    /*!
+        Метод, возвращаюций итератор, который указывает на последний элемент массива
+    */
+    
     MyIterator <T> &End(){
         MyIterator <T> it(&(this->array[this->currentsize]));
         return it;
     }
     
+    /*!
+        Конструктор, инициализирующий текущую длину вектора
+     \param new_size {текущая длина вектора}
+    */
 
     MyVector(const unsigned int new_size){
         if (new_size <= size){
@@ -54,6 +79,10 @@ class MyVector{
         else throw std::exception();
     }
 
+    /*!
+           Конструктор, инициализирующий текущий вектор в сооствествии с указанным вектором
+     \param new_array {инициализирующий вектор}
+       */
     
     MyVector(const T *new_array){
         unsigned int arr_size = _msize(new_array)/sizeof(T);
@@ -66,6 +95,10 @@ class MyVector{
         else throw std::exception();
     }
 
+/*!
+Перегруженный оператор взятия элемента массива
+ \param index {индекс элемента}
+          */
     
     T& operator[](const unsigned int index){
         if (index > currentsize)
@@ -75,6 +108,10 @@ class MyVector{
     }
 
   
+/*!
+Метод, добавляющий элемент в конец вектора
+ \param element {элемент вектора}
+*/
     void Push_back (const T &element){
         T *p = new T[currentsize + 1];
         for (int i = 0; i < currentsize; i++)
@@ -85,6 +122,9 @@ class MyVector{
         currentsize++;
     }
 
+    /*!
+    Метод, удаляющий последний элемент вектора
+    */
     
     void Pop_back(){
         if (currentsize){
@@ -98,7 +138,12 @@ class MyVector{
         else throw std::exception();
     }
 
+    /*!
+    Метод, удаляющий элемент по индексу в массиве
+     \param index {индекс элемента}
+    */
 
+    
     void Erase(const unsigned int index){
         if (index <= currentsize){
             T *p1 = new T[currentsize - 1];
@@ -112,7 +157,10 @@ class MyVector{
         }
         else throw std::out_of_range("index is out of range");
     }
-
+    
+    /*!
+    Метод, удаляющий все элементы массива
+    */
 
     void Clear(){
         if (array)

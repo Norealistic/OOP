@@ -13,10 +13,10 @@ namespace Dungeon{
                virtual unsigned int GetDefenceValue();
                virtual void SetType(armor_type type);
                virtual void SetDefenceValue(unsigned int value);
-               bool operator != (Armor &obj) {
+               /*bool operator != (Armor &obj) {
                    if (this->GetDefenceValue() == obj.GetDefenceValue() && this->GetType() == obj.GetType())
                        return false;
                    else return true;
-               };
+               }; */
        };
 }

@@ -3,70 +3,74 @@
 namespace Dungeon{
 
 
-void InitLevels(){
-    std::vector <CatacombsLevel> ::iterator it = level_list.begin();
-    level_numbers number = LEVEL_1;
-    for (int i = 0; i<3; i++){
-        it->SetLevel(number);
-        number = (level_numbers)((int)(number + 1));
-        it++;
+template <class T>
+int getNum(T &a){
+    std::cin>>a;
+    if (!std::cin.good()){
+        return -1;
     }
+    return 1;
 }
 
-void UploadCharacters(CatacombsLevel& level){
-    srand((unsigned int)time(0));
-    std::vector <Enemy> sub_enemies = level.GetEnemies();
-    std::vector <Enemy> ::iterator this_enemy = sub_enemies.begin();
-    User.current_level = (level_numbers)level.GetLevel();
-    level.SetPointType(User.current_point, PLAYER, User.current_level, nullptr);
+void InitLevels(level_numbers level, square& map, std::vector <CatacombsLevel>& level_list){
+    //std::vector <CatacombsLevel> ::iterator it = level_list.begin();
+    level_list[level].SetLevel(map);
+    //number = (level_numbers)((int)(number + 1));
+    //it++;
+}
+
+void UploadCharacters(struct PlayerStatement &user, level_numbers level, square& map, std::vector <CatacombsLevel> level_list, std::vector <std::vector <struct EnemyStatement>>& Level_enemies){
+    srand(time(0));
+    //user.current_level = (level_numbers)level_list[level].GetLevel();
+    std::vector <Enemy*> sub_enemies = level_list[level].GetEnemies();
+    std::vector <Enemy*> ::iterator this_enemy = sub_enemies.begin();
+    level_list[level].SetPointType(user.current_point, PLAYER, map);
+    std::vector <struct EnemyStatement> Line;
     for (int i = 0; i < sub_enemies.size(); i++, this_enemy++){
         EnemyStatement enemy;
-        enemy.enemy = *this_enemy;
-        enemy.current_level = User.current_level;
+        Enemy* someone = *this_enemy;
+        enemy.enemy = someone;
+        enemy.current_level = user.current_level;
         couple point;
         do{
             point = {rand()%40, rand()%20};
-        }while(level.GetPointType(point) != FLOOR);
+        }while(level_list[level].GetPointType(point) != FLOOR);
         enemy.current_point.x = point.x;
         enemy.current_point.y = point.y;
-        level.SetPointType(point, ENEMY, User.current_level, &(*this_enemy));
-        switch(level.GetLevel()){
-            default:{
-                Level1_enemies.push_back(enemy);
-                break;
-                }
-            case 2:{
-                Level2_enemies.push_back(enemy);
-                break;
-            }
-            case 3:{
-                Level3_enemies.push_back(enemy);
-                break;
-            }
-        }
+        if(enemy.enemy->GetDamageValue() != 0) level_list[level].SetPointType(point, ENEMY, map, &(**this_enemy));
+        Line.push_back(enemy);
     }
+    Level_enemies.at(level) = Line;
 }
 
-void DoorsMenu(struct PlayerStatement &user){
+void DoorsMenu(struct PlayerStatement &user, square& map, std::vector <CatacombsLevel> level_list){
     couple point = user.current_point;
-    if (map_catalog[user.current_level].lines[point.x][point.y+1] == '+' || map_catalog[user.current_level].lines[point.x][point.y-1] == '+' || map_catalog[user.current_level].lines[point.x+1][point.y] == '+' || map_catalog[user.current_level].lines[point.x-1][point.y] == '+')
+    if (map.lines[point.y][point.x+1] == '+' || map.lines[point.y][point.x-1] == '+' || map.lines[point.y+1][point.x] == '+' || map.lines[point.y-1][point.x] == '+')
         std::cout << "  o. open door" << std::endl;
-    if (map_catalog[user.current_level].lines[point.x][point.y+1] == '/' || map_catalog[user.current_level].lines[point.x][point.y-1] == '/' || map_catalog[user.current_level].lines[point.x+1][point.y] == '/' || map_catalog[user.current_level].lines[point.x-1][point.y] == '/')
+    if (map.lines[point.y][point.x+1] == '/' || map.lines[point.y][point.x-1] == '/' || map.lines[point.y+1][point.x] == '/' || map.lines[point.y-1][point.x] == '/')
         std::cout << "  c. close door" << std::endl;
 }
 
-void StepsMenu(struct PlayerStatement &user){
+void StepsMenu(struct PlayerStatement &user, square& map, std::vector <CatacombsLevel> level_list){
     couple point = user.current_point;
     std::cout << "You can go..." << std::endl;
-    if (map_catalog[user.current_level].lines[point.x][point.y+1] == '.')std::cout << "   w Up" << std::endl;
-    if (map_catalog[user.current_level].lines[point.x][point.y-1] == '.')std::cout << "   s Down" << std::endl;
-    if (map_catalog[user.current_level].lines[point.x-1][point.y] == '.')std::cout << "   a Left" << std::endl;
-    if (map_catalog[user.current_level].lines[point.x+1][point.y] == '.')std::cout << "   d Right" << std::endl;
-    if (map_catalog[user.current_level].lines[point.x][point.y+1] == '<' || map_catalog[user.current_level].lines[point.x][point.y-1] == '<' || map_catalog[user.current_level].lines[point.x-1][point.y] == '<' || map_catalog[user.current_level].lines[point.x+1][point.y] == '<')
+    if (map.lines[point.y-1][point.x] == '.')std::cout << "   w Up" << std::endl;
+    if (map.lines[point.y+1][point.x] == '.')std::cout << "   s Down" << std::endl;
+    if (map.lines[point.y][point.x-1] == '.')std::cout << "   a Left" << std::endl;
+    if (map.lines[point.y][point.x+1] == '.')std::cout << "   d Right" << std::endl;
+    if (map.lines[point.y+1][point.x] == '<' || map.lines[point.y-1][point.x] == '<' || map.lines[point.y][point.x-1] == '<' || map.lines[point.y][point.x+1] == '<')
         std::cout << "  <. Upstairs" << std::endl;
-    if (map_catalog[user.current_level].lines[point.x][point.y+1] == '>' || map_catalog[user.current_level].lines[point.x][point.y-1] == '>' || map_catalog[user.current_level].lines[point.x-1][point.y] == '>' || map_catalog[user.current_level].lines[point.x+1][point.y] == '>')
+    if (map.lines[point.y][point.x+1] == '>' || map.lines[point.y][point.x-1] == '>' || map.lines[point.y-1][point.x] == '>' || map.lines[point.y+1][point.x] == '>')
         std::cout << "  >. Downstairs" << std::endl;
-    DoorsMenu(user);
+    DoorsMenu(user, map, level_list);
+    std::cout << "  u. I want to upgrade..." << std::endl;
+    std::cout << "  p. I want to drink..." << std::endl;
+    std::cout << "  i. Info" << std::endl;
+    if((map.lines[point.y][point.x+1] >= 97 && map.lines[point.y][point.x+1] <= 102) || (map.lines[point.y][point.x-1] >= 97 && map.lines[point.y][point.x-1] <= 102) || (map.lines[point.y-1][point.x] >= 97 && map.lines[point.y-1][point.x] <= 102) || (map.lines[point.y+1][point.x] >= 97 && map.lines[point.y+1][point.x] <= 102)) std::cout << "  e. Attack enemy" << std::endl;
+    if (map.lines[point.y][point.x+1] == '&' || map.lines[point.y][point.x-1] == '&' || map.lines[point.y-1][point.x] == '&' || map.lines[point.y+1][point.x] == '&')
+        std::cout << "  &. Open chest" << std::endl;
+    if(map.lines[point.y][point.x+1] == '/' || map.lines[point.y][point.x-1] == '/' || map.lines[point.y-1][point.x] == '/' || map.lines[point.y+1][point.x] == '/')
+        std::cout << "  t. Through the door" << std::endl;
     std::cout << "  . Not go, stay here" << std::endl;
 }
 
@@ -77,7 +81,7 @@ void UpgradeCharacteristicsMenu(){
     "4. Health" << std::endl;
 }
 
-void UpgradeCharacteristics(struct PlayerStatement &user){
+void UpgradeCharacteristics(struct PlayerStatement &user, square& map, std::vector <CatacombsLevel> level_list){
     UpgradeCharacteristicsMenu();
     int choice;
     getNum<int>(choice);
@@ -104,217 +108,296 @@ void UpgradeCharacteristics(struct PlayerStatement &user){
     user.player.UpgradeFeature(name);
 }
 
-void PotionsMenu(struct PlayerStatement &user){
-    std::vector <Potion *> potion_list = user.player.PotionList();
-    std::vector <Potion *> ::iterator it = potion_list.begin();
+void PotionsMenu(struct PlayerStatement &user, square& map, std::vector <CatacombsLevel> level_list){
+    std::vector <Potion> potion_list = user.player.PotionList();
+    std::vector <Potion> ::iterator it = potion_list.begin();
+    std::cout << "POTIONS: " << std::endl << std::endl;
     char number = 'A';
     for (int i = 0; i < potion_list.size(); i++){
         std::string name;
-        if ((*it)->GetModificator().type == STRENGTH) name = "strength";
-        if ((*it)->GetModificator().type == AGILITY) name = "agility";
-        if ((*it)->GetModificator().type == STAMINA) name = "stamina";
-        if ((*it)->GetModificator().type == HEALTH) name = "health";
-        std::cout << number << ". " << name << ", " << (*it)->GetModificator().current << std::endl;
+        if (it->GetModificator().type == STRENGTH) name = "strength";
+        if (it->GetModificator().type == AGILITY) name = "agility";
+        if (it->GetModificator().type == STAMINA) name = "stamina";
+        if (it->GetModificator().type == HEALTH) name = "health";
+        std::cout << number << ". " << name << ", " << it->GetModificator().current << std::endl;
         number = number+1;
     }
 }
 
-void DrinkPotion(struct PlayerStatement &user){
+void DrinkPotion(struct PlayerStatement &user, square& map, std::vector <CatacombsLevel> level_list){
     std::cout << "You would like to drink potion to upgrade..." << std::endl;
-    PotionsMenu(user);
+    PotionsMenu(user, map, level_list);
     fflush(stdin);
     char choice;
     do{
         choice = getchar();
         fflush(stdin);
     }while (choice >= 65 && choice <= 90);
-    std::vector <Potion *> potion_list = user.player.PotionList();
+    std::vector <Potion> potion_list = user.player.PotionList();
     int number = (int)(choice - 64);
-    Potion *potion = potion_list[number];
-    user.player.DrinkPotion(*potion);
+    Potion potion = potion_list[number];
+    user.player.DrinkPotion(potion);
 }
 
-void StepUp(struct PlayerStatement &user){
+
+void ThroughTheDoor(struct PlayerStatement &user, square& map, std::vector <CatacombsLevel> level_list){
     couple point = user.current_point;
-    user.current_point.y += dy;
+    if(map.lines[point.y][point.x+1] == '/')
+        StepRight(user, map, level_list, 2);
+    if(map.lines[point.y][point.x-1] == '/')
+        StepLeft(user, map, level_list, 2);
+    if(map.lines[point.y-1][point.x] == '/')
+        StepUp(user, map, level_list, 2);
+    if(map.lines[point.y+1][point.x] == '/')
+        StepDown(user, map, level_list, 2);
+}
+void StepUp(struct PlayerStatement &user, square& map, std::vector <CatacombsLevel> level_list, int number){
+    couple point = user.current_point;
+    user.current_point.y -= dy*number;
     level_numbers level = user.current_level;
     Case place = level_list[level].GetCase(user.current_point);
     if (place.GetItem()){
-        GetItem(user);
+        GetItem(user, map, level_list);
         level_list[level].SetCase(place, user.current_point);
     }
-    level_list[level].SetPointType(point, FLOOR, level, nullptr);
-    level_list[level].SetPointType(user.current_point, PLAYER, level, nullptr);
+    level_list[level].SetPointType(point, FLOOR, map);
+    level_list[level].SetPointType(user.current_point, PLAYER, map);
 }
 
-void StepDown(struct PlayerStatement &user){
+void StepDown(struct PlayerStatement &user, square& map, std::vector <CatacombsLevel> level_list, int number){
     couple point = user.current_point;
-    user.current_point.y -= dy;
+    user.current_point.y += dy*number;
     level_numbers level = user.current_level;
     Case place = level_list[level].GetCase(user.current_point);
     if (place.GetItem()){
-        GetItem(user);
+        GetItem(user, map, level_list);
         level_list[level].SetCase(place, user.current_point);
     }
-    level_list[level].SetPointType(point, FLOOR, level, nullptr);
-    level_list[level].SetPointType(user.current_point, PLAYER, level, nullptr);
+    level_list[level].SetPointType(point, FLOOR, map);
+    level_list[level].SetPointType(user.current_point, PLAYER, map);
 }
 
 
-void StepRight(struct PlayerStatement &user){
+void StepRight(struct PlayerStatement &user, square& map, std::vector <CatacombsLevel> level_list, int number){
     couple point = user.current_point;
-    user.current_point.x += dx;
+    user.current_point.x += dx*number;
     level_numbers level = user.current_level;
     Case place = level_list[level].GetCase(user.current_point);
     if (place.GetItem()){
-        GetItem(user);
+        GetItem(user, map, level_list);
         level_list[level].SetCase(place, user.current_point);
     }
-    level_list[level].SetPointType(point, FLOOR, level, nullptr);
-    level_list[level].SetPointType(user.current_point, PLAYER, level, nullptr);
+    level_list[level].SetPointType(point, FLOOR, map);
+    level_list[level].SetPointType(user.current_point, PLAYER, map);
 }
 
 
-void StepLeft(struct PlayerStatement &user){
+void StepLeft(struct PlayerStatement &user, square& map, std::vector <CatacombsLevel> level_list, int number){
     couple point = user.current_point;
-    user.current_point.x -= dx;
+    user.current_point.x -= dx*number;
     level_numbers level = user.current_level;
     Case place = level_list[level].GetCase(user.current_point);
     if (place.GetItem()){
-        GetItem(user);
+        GetItem(user, map, level_list);
         level_list[level].SetCase(place, user.current_point);
     }
-    level_list[level].SetPointType(point, FLOOR, level, nullptr);
-    level_list[level].SetPointType(user.current_point, PLAYER, level, nullptr);
+    level_list[level].SetPointType(point, FLOOR, map);
+    level_list[level].SetPointType(user.current_point, PLAYER, map);
 }
 
 
-void OpenDoor(struct PlayerStatement &user){
+void OpenDoor(struct PlayerStatement &user, square& map, std::vector <CatacombsLevel> level_list){
     couple point = user.current_point;
-    if (map_catalog[user.current_level].lines[point.x][point.y+1] == '+'){
-        point.y += dy;
-        level_list[user.current_level].OpenDoor(point);
-        map_catalog[user.current_level].lines[point.x][point.y] = '/';
-    }
-    if(map_catalog[user.current_level].lines[point.x][point.y-1] == '+'){
-        point.y -= dy;
-        level_list[user.current_level].OpenDoor(point);
-        map_catalog[user.current_level].lines[point.x][point.y] = '/';
-    }
-    if(map_catalog[user.current_level].lines[point.x+1][point.y] == '+'){
+    if (map.lines[point.y][point.x+dx] == '+'){
         point.x += dx;
         level_list[user.current_level].OpenDoor(point);
-        map_catalog[user.current_level].lines[point.x][point.y] = '/';
+        map.lines[point.y][point.x] = '/';
     }
-    if(map_catalog[user.current_level].lines[point.x-1][point.y] == '+'){
+    if(map.lines[point.y][point.x-dx] == '+'){
         point.x -= dx;
         level_list[user.current_level].OpenDoor(point);
-        map_catalog[user.current_level].lines[point.x][point.y] = '/';
+        map.lines[point.y][point.x] = '/';
+    }
+    if(map.lines[point.y+dy][point.x] == '+'){
+        point.y += dy;
+        level_list[user.current_level].OpenDoor(point);
+        map.lines[point.y][point.x] = '/';
+    }
+    if(map.lines[point.y-dy][point.x] == '+'){
+        point.y -= dy;
+        level_list[user.current_level].OpenDoor(point);
+        map.lines[point.y][point.x] = '/';
     }
 }
 
-void CloseDoor(struct PlayerStatement &user){
+void CloseDoor(struct PlayerStatement &user, square& map, std::vector <CatacombsLevel> level_list){
     couple point = user.current_point;
-    if (map_catalog[user.current_level].lines[point.x][point.y+1] == '/'){
-        point.y += dy;
-        level_list[user.current_level].CloseDoor(point);
-        map_catalog[user.current_level].lines[point.x][point.y] = '+';
-    }
-    if(map_catalog[user.current_level].lines[point.x][point.y-1] == '/'){
-        point.y -= dy;
-        level_list[user.current_level].CloseDoor(point);
-        map_catalog[user.current_level].lines[point.x][point.y] = '+';
-    }
-    if(map_catalog[user.current_level].lines[point.x+1][point.y] == '/'){
+    if (map.lines[point.y][point.x+dx] == '+'){
         point.x += dx;
         level_list[user.current_level].CloseDoor(point);
-        map_catalog[user.current_level].lines[point.x][point.y] = '+';
+        map.lines[point.y][point.x] = '/';
     }
-    if(map_catalog[user.current_level].lines[point.x-1][point.y] == '/'){
+    if(map.lines[point.y][point.x-dx] == '+'){
         point.x -= dx;
         level_list[user.current_level].CloseDoor(point);
-        map_catalog[user.current_level].lines[point.x][point.y] = '+';
+        map.lines[point.y][point.x] = '/';
+    }
+    if(map.lines[point.y+dy][point.x] == '+'){
+        point.y += dy;
+        level_list[user.current_level].CloseDoor(point);
+        map.lines[point.y][point.x] = '/';
+    }
+    if(map.lines[point.y-dy][point.x] == '+'){
+        point.y -= dy;
+        level_list[user.current_level].CloseDoor(point);
+        map.lines[point.y][point.x] = '/';
     }
 }
 
-void GoUpstairs(struct PlayerStatement &user){
-    user.current_level = (level_numbers)((int)(user.current_level + 1));
-    user.current_point = start_point;
+bool GoUpstairs(struct PlayerStatement &user, square& map, std::vector <CatacombsLevel> level_list, couple& start_point, std::vector <std::vector <struct EnemyStatement>>& Level_enemies){
+    if (user.current_level != LEVEL_3){
+        level_list[user.current_level].SetPointType(user.current_point, FLOOR, map);
+        user.current_level = (level_numbers)((int)(user.current_level + 1));
+        user.current_point = start_point;
+        InitLevels(user.current_level, map, level_list);
+        UploadCharacters(user, user.current_level, map, level_list, Level_enemies);
+        return false;
+    }
+    else return true;
 }
 
-void GoDownstairs(struct PlayerStatement &user){
+void GoDownstairs(struct PlayerStatement &user, square& map, std::vector <CatacombsLevel> level_list, couple& start_point, std::vector <std::vector <struct EnemyStatement>>& Level_enemies){
     if (user.current_level != LEVEL_1){
+        level_list[user.current_level].SetPointType(user.current_point, FLOOR, map);
         user.current_level = (level_numbers)((int)(user.current_level - 1));
         user.current_point = start_point;
+        InitLevels(user.current_level, map, level_list);
+        UploadCharacters(user, user.current_level, map, level_list, Level_enemies);
     }
 }
 
-void MakeStep(struct PlayerStatement &user){
-    StepsMenu(user);
+bool MakeStep(struct PlayerStatement &user, square& map, std::vector <CatacombsLevel> level_list, std::vector <std::vector <struct EnemyStatement>>& Level_enemies){
+    bool flag = false;
+    couple start_point = {0, 8};
+    StepsMenu(user, map, level_list);
     fflush(stdin);
     char choice;
     do{
         choice = getchar();
         fflush(stdin);
-    }while(choice != 'a' && choice != 'w' && choice != 's' && choice != 'd' && choice != 'o' && choice != 'c' && choice != '<' && choice != '>' && choice != '.');
+    }while(choice != 'a' && choice != 'w' && choice != 's' && choice != 'd' && choice != 'o' && choice != 'c' && choice != '<' && choice != '>' && choice != '.' && choice != 'u' && choice != 'p' && choice != 'i' && choice != 'e' && choice != '&' && choice != 't');
     switch(choice){
         default: break;
         case 'a':{
-            StepLeft(user);
+            StepLeft(user, map, level_list, 1);
+            couple point = user.current_point;
+            if (map.lines[point.y][point.x] == '!' || map.lines[point.y][point.x] == ')' || map.lines[point.y][point.x] == ']' || map.lines[point.y][point.x] == '\'')
+                GetItem(user, map, level_list);
             break;
         }
         case 'w':{
-            StepUp(user);
+            StepUp(user, map, level_list, 1);
+            couple point = user.current_point;
+            if (map.lines[point.y][point.x] == '!' || map.lines[point.y][point.x] == ')' || map.lines[point.y][point.x] == ']' || map.lines[point.y][point.x] == '\'')
+                GetItem(user, map, level_list);
             break;
         }
         case 's':{
-            StepDown(user);
+            StepDown(user, map, level_list, 1);
+            couple point = user.current_point;
+            if (map.lines[point.y][point.x] == '!' || map.lines[point.y][point.x] == ')' || map.lines[point.y][point.x] == ']' || map.lines[point.y][point.x] == '\'')
+                GetItem(user, map, level_list);
             break;
         }
         case 'd':{
-            StepRight(user);
+            StepRight(user, map, level_list, 1);
+            couple point = user.current_point;
+            if (map.lines[point.y][point.x] == '!' || map.lines[point.y][point.x] == ')' || map.lines[point.y][point.x] == ']' || map.lines[point.y][point.x] == '\'')
+                GetItem(user, map, level_list);
             break;
         }
         case 'o':{
-            OpenDoor(user);
+            OpenDoor(user, map, level_list);
             break;
         }
         case 'c':{
-            CloseDoor(user);
+            CloseDoor(user, map, level_list);
             break;
         }
         case '<':{
-            GoUpstairs(user);
+            flag = GoUpstairs(user, map, level_list, start_point, Level_enemies);
             break;
         }
         case '>':{
-            GoDownstairs(user);
+            GoDownstairs(user, map, level_list, start_point, Level_enemies);
+            break;
+        }
+        case 'u':{
+            UpgradeCharacteristics(user, map, level_list);
+            break;
+        }
+        case 'p':{
+            DrinkPotion(user, map, level_list);
+            break;
+        }
+        case 'i':{
+            PlayerInfo(user, map, level_list);
+            break;
+        }
+        case 'e':{
+            couple point = user.current_point;
+            if(map.lines[point.y][point.x+dx] >= 97 && map.lines[point.y][point.x+dx] <= 102)
+                point.x += dx;
+            if(map.lines[point.y][point.x-dx] >= 97 && map.lines[point.y][point.x-dx] <= 102)
+                point.x -= dx;
+            if(map.lines[point.y+dy][point.x] >= 97 && map.lines[point.y+dy][point.x] <= 102)
+                point.y += dy;
+            if(map.lines[point.y-dy][point.x] >= 97 && map.lines[point.y-dy][point.x] <= 102)
+                point.y += dy;
+            EnemyStatement enemy;
+            for (int i = 0; i < Level_enemies[user.current_level].size(); i++){
+                if (Level_enemies[user.current_level][i].current_point.x == point.x &&  Level_enemies[user.current_level][i].current_point.y == point.y){
+                    enemy = Level_enemies[user.current_level][i];
+                }
+            }
+            AttackEmeny(user, enemy, map, level_list);
+            break;
+        }
+
+        case '&':{
+            OpenChest(user, map, level_list);
+            break;
+        }
+        case 't':{
+            ThroughTheDoor(user, map, level_list);
             break;
         }
         case '.': break;
     }
+    return flag;
 }
 
-void WeaponMenu(struct PlayerStatement &user){
-    std::cout << "There are..." << std::endl;
-    std::vector <Weapon *> weapon = user.player.WeaponList();
-    std::vector <Weapon *> ::iterator it = weapon.begin();
+void WeaponMenu(struct PlayerStatement &user, square& map, std::vector <CatacombsLevel> level_list){
+    std::cout << "WEAPON:" << std::endl << std::endl;
+    std::vector <Weapon> weapon = user.player.WeaponList();
+    std::vector <Weapon> ::iterator it = weapon.begin();
+    if (weapon.size() > 0){
     while (it != weapon.end()){
         std::string info = "    ";
-        switch((*it)->GetName()){
+        switch(it->GetName()){
             default: break;
             case WEAPON:{
-                info += str_item_names[WEAPON] + ", " + std::to_string((int)(*it)->GetDamageValue());
+                info += str_item_names[WEAPON] + ", " + std::to_string((int)it->GetDamageValue());
                 break;
             }
             case ENCHANTED_WEAPON:{
-                EnchantedWeapon *ench = dynamic_cast<EnchantedWeapon*>((*it));
+                EnchantedWeapon *ench = dynamic_cast<EnchantedWeapon*>(&(*it));
                 info += str_item_names[ENCHANTED_WEAPON] + ", " + str_enemy_names[ench->GetEnemyTypeUp()] + ", " + std::to_string((int)(ench->GetDamageValue()*ench->GetIndex())) + ", " + str_enemy_names[ench->GetEnemyTypeDown()] + ", " +
                 std::to_string((int)(ench->GetDamageValue()/ench->GetIndex()));
                 break;
             }
             case ARTEFACT_WEAPON:{
-                ArtefactWeapon *art = dynamic_cast<ArtefactWeapon*>((*it));
+                ArtefactWeapon *art = dynamic_cast<ArtefactWeapon*>(&(*it));
                 info += str_item_names[ARTEFACT_WEAPON] + ", " + std::to_string((int)art->GetDamageValue()) + ", ";
                 std::vector <characteristic> list = art->GetModificators();
                 std::vector <characteristic> ::iterator sub_it = list.begin();
@@ -327,15 +410,18 @@ void WeaponMenu(struct PlayerStatement &user){
             }
         }
         std::cout << info << std::endl;
+        it++;
+    }
     }
     std::cout << "... in your bag" << std::endl;
 }
 
-void ArmorMenu(struct PlayerStatement &user){
-    std::cout << "There are..." << std::endl;
-    std::vector <Armor *> armor = user.player.ArmorList();
-    std::vector <Armor *> ::iterator it = armor.begin();
-    while(it != armor.end()){
+void ArmorMenu(struct PlayerStatement &user, square& map, std::vector <CatacombsLevel> level_list){
+    std::cout << "ARMOR: " << std::endl << std::endl;
+    MyVector <Armor> armor = user.player.ArmorList();
+    MyIterator <Armor> it = armor.Begin();
+    if (armor.current_size() > 0){
+    while(it != armor.End()){
         std::string info = "    ";
         switch((*it)->GetName()){
             default: break;
@@ -344,7 +430,7 @@ void ArmorMenu(struct PlayerStatement &user){
                 break;
             }
             case ARTEFACT_ARMOR:{
-                ArtefactArmor *art = dynamic_cast<ArtefactArmor*>((*it));
+                ArtefactArmor *art = dynamic_cast<ArtefactArmor*>(*it);
                 info += str_item_names[ARTEFACT_ARMOR] + ", " + std::to_string((int)art->GetDefenceValue()) + ", ";
                 std::vector <characteristic> list = art->GetModificators();
                 std::vector <characteristic> ::iterator sub_it = list.begin();
@@ -357,20 +443,24 @@ void ArmorMenu(struct PlayerStatement &user){
             }
         }
         std::cout << info << std::endl;
+        it++;
+    }
     }
     std::cout << "... in your bag" << std::endl;
 }
 
-void PlayerInfo(struct PlayerStatement &user){
-    PotionsMenu(user);
-    WeaponMenu(user);
-    ArmorMenu(user);
+void PlayerInfo(struct PlayerStatement &user, square& map, std::vector <CatacombsLevel> level_list){
+    PotionsMenu(user, map, level_list);
+    WeaponMenu(user, map, level_list);
+    ArmorMenu(user, map, level_list);
     std::cout << "experience: " << user.player.GetExperience() << std::endl;
     std::vector <characteristic> feature_table = user.player.GetFeatures();
     std::vector <characteristic> ::iterator it = feature_table.begin();
     while (it != feature_table.end()){
         std::cout << str_feature_names[it->type] << ": " << it->current << std::endl;
+        it++;
     }
+    /*if(user.player.GetWeapon() != nullptr){
     Weapon* weapon = user.player.GetWeapon();
     switch (weapon->GetName()){
         default: break;
@@ -395,6 +485,7 @@ void PlayerInfo(struct PlayerStatement &user){
             break;
         }
     }
+    }
     MyVector <Armor> armor = user.player.GetArmor();
     MyIterator <Armor> my_it = armor.Begin();
     for(int i = 0; i < armor.current_size(); i++, my_it++){
@@ -415,65 +506,143 @@ void PlayerInfo(struct PlayerStatement &user){
                 }
             }
         }
-    }
+    }*/
     std::cout << "Key quantity: " << user.player.GetKeyNumber() << std::endl;
 }
 
-    void AttackEmeny(struct PlayerStatement &user, struct EnemyStatement &enemy){
-        characteristic enemy_health = {HEALTH, 0, 0};
-        characteristic player_health = {HEALTH, 0, 0};
-        do{
-            user.player.GenerateDamage(enemy.enemy);
-            enemy.enemy.GenerateDamage(user.player);
-            std::vector <characteristic> enemys = enemy.enemy.GetFeatures();
-            enemy_health = enemys[0];
-            std::vector <characteristic> players = user.player.GetFeatures();
-            std::vector <characteristic> ::iterator it = players.begin();
-            while (it->type != HEALTH) it++;
-            player_health = *it;
-        }while(player_health.current != 0 && enemy_health.current != 0);
-        if (enemy_health.current == 0){
-            std::vector <Item *> items = enemy.enemy.GetItems();
-            std::vector <Item *> ::iterator it = items.begin();
-            couple point = enemy.current_point;
-            Case& cassse = level_list[enemy.current_level].GetCase(point);
-            cassse.SetItem((*it));
-            level_list[enemy.current_level].SetCase(cassse, point);
-            level_list[enemy.current_level].SetPointType(point, FLOOR, enemy.current_level, nullptr);
-        }
-        if (player_health.current == 0)
-            throw "I'm dead";
+void AttackEmeny(struct PlayerStatement &user, struct EnemyStatement &enemy, square& map, std::vector <CatacombsLevel> level_list){
+    characteristic enemy_health = {HEALTH, 0, 0};
+    characteristic player_health = {HEALTH, 0, 0};
+    do{
+        user.player.GenerateDamage(*(enemy.enemy));
+        enemy.enemy->GenerateDamage(user.player);
+        std::vector <characteristic> enemys = enemy.enemy->GetFeatures();
+        enemy_health = enemys[0];
+        std::vector <characteristic> players = user.player.GetFeatures();
+        std::vector <characteristic> ::iterator it = players.begin();
+        while (it->type != HEALTH) it++;
+        player_health = *it;
+    }while(player_health.current != 0 && enemy_health.current != 0);
+    if (enemy_health.current == 0){
+        std::vector <Item> items = enemy.enemy->GetItems();
+        std::vector <Item> ::iterator it = items.begin();
+        couple point = enemy.current_point;
+        Case& cassse = level_list[enemy.current_level].GetCase(point);
+        cassse.SetItem(&(*it));
+        level_list[enemy.current_level].SetCase(cassse, point);
+        level_list[enemy.current_level].SetPointType(point, FLOOR, map);
+        enemy.enemy->~Enemy();
     }
-
-    void GetItem(struct PlayerStatement &user){
-        Case& current = level_list[user.current_level].GetCase(user.current_point);
-        user.player.SetItem(current.GetItem());
-        current.SetItem(nullptr);
-    }
-
-    void OpenChest(struct PlayerStatement &user){
-        Case place;
-        couple points[4] = {{user.current_point.x, user.current_point.y+dy}, {user.current_point.x, user.current_point.y-dy}, {user.current_point.x+dx, user.current_point.y}, {user.current_point.x-dx, user.current_point.y}};
-        couple *current = points;
-        do{
-            place = level_list[user.current_level].GetCase(*current);
-            current++;
-        }while(current && !place.GetChest());
-        try{
-            place.GetChest()->OpenAttempt(user.player);
-        }
-        catch(const std::invalid_argument &er){
-            std::cout << er.what() << std::endl;
-            return;
-        }
-        Item *item = place.GetChest()->GetItem();
-        place.SetChest(nullptr);
-        place.SetItem(item);
-        level_list[user.current_level].SetCase(place, *current);
-        level_list[user.current_level].SetPointType(*current, FLOOR, user.current_level, nullptr);
-    }
-
-
-
+    if (player_health.current == 0)
+        throw "I'm dead";
 }
 
+void GetItem(struct PlayerStatement &user, square& map, std::vector <CatacombsLevel> level_list){
+    Case& current = level_list[user.current_level].GetCase(user.current_point);
+    switch(current.GetItem()->GetName()){
+        default: break;
+        case KEYCHAIN:{
+            int keys = user.player.GetKeyNumber();
+            user.player.SetKeyNumber(keys+1);
+            break;
+        }
+        case ARMOR:{
+            Armor *armor = dynamic_cast<Armor*>(current.GetItem());
+            user.player.TakeArmor(*armor);
+            break;
+        }
+        case WEAPON:{
+            Weapon *weapon = dynamic_cast<Weapon*>(current.GetItem());
+            user.player.TakeWeapon(*weapon);
+            break;
+        }
+        case POTION:{
+            Potion *potion = dynamic_cast<Potion*>(current.GetItem());
+            user.player.SetPotion(*potion);
+            break;
+        }
+        case ARTEFACT_ARMOR:{
+            ArtefactArmor *armor = dynamic_cast<ArtefactArmor*>(current.GetItem());
+            user.player.TakeArmor(*armor);
+            break;
+        }
+        case ARTEFACT_WEAPON:{
+            ArtefactWeapon *weapon = dynamic_cast<ArtefactWeapon*>(current.GetItem());
+            user.player.TakeWeapon(*weapon);
+            break;
+        }
+        case ENCHANTED_WEAPON:{
+            EnchantedWeapon *weapon = dynamic_cast<EnchantedWeapon*>(current.GetItem());
+            user.player.TakeWeapon(*weapon);
+            break;
+        }
+    }
+    current.SetItem(nullptr);
+}
+
+void OpenChest(struct PlayerStatement &user, square& map, std::vector <CatacombsLevel>& level_list){
+    Case place;
+    couple points[4] = {{user.current_point.x, user.current_point.y+dy}, {user.current_point.x, user.current_point.y-dy}, {user.current_point.x+dx, user.current_point.y}, {user.current_point.x-dx, user.current_point.y}};
+    couple *current = points;
+    do{
+        place = level_list[user.current_level].GetCase(*current);
+        current++;
+    }while(current && !place.GetChest());
+    current--;
+    try{
+        place.GetChest()->OpenAttempt(user.player);
+    }
+    catch(const std::invalid_argument &er){
+        std::cout << er.what() << std::endl;
+        return;
+    }
+    Item *item = place.GetChest()->GetItem();
+    place.SetChest(nullptr);
+    place.SetItem(item);
+    level_list[user.current_level].SetCase(place, *current);
+    level_list[user.current_level].SetPointType(*current, FLOOR, map);
+    switch(item->GetName()){
+        default: break;
+        case KEYCHAIN:{
+            int keys = user.player.GetKeyNumber();
+            user.player.SetKeyNumber(keys+1);
+            break;
+        }
+        case ARMOR:{
+            Armor *armor = dynamic_cast<Armor*>(item);
+            user.player.TakeArmor(*armor);
+            break;
+        }
+        case WEAPON:{
+            Weapon *weapon = dynamic_cast<Weapon*>(item);
+            user.player.TakeWeapon(*weapon);
+            break;
+        }
+        case POTION:{
+            Potion *potion = new Potion();
+            potion = dynamic_cast<Potion*>(item);
+            user.player.SetPotion(*potion);
+            break;
+        }
+        case ARTEFACT_ARMOR:{
+            ArtefactArmor *armor = dynamic_cast<ArtefactArmor*>(item);
+            user.player.TakeArmor(*armor);
+            break;
+        }
+        case ARTEFACT_WEAPON:{
+            ArtefactWeapon *weapon = dynamic_cast<ArtefactWeapon*>(item);
+            user.player.TakeWeapon(*weapon);
+            break;
+        }
+        case ENCHANTED_WEAPON:{
+            EnchantedWeapon *weapon = dynamic_cast<EnchantedWeapon*>(item);
+            user.player.TakeWeapon(*weapon);
+            break;
+        }
+    }
+}
+
+void Output(square& map){
+    map_output(map);
+}
+}

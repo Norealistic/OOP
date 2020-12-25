@@ -18,6 +18,12 @@ namespace Dungeon{
             Item* item;
             Chest* chest;
             couple coordinates;
+            void DeleteChest(){
+                this->chest = nullptr;
+            };
+            void DeleteItem(){
+                this->item = nullptr;
+            };
         public:
             Case(TYPE type = FLOOR, couple point = {0,0});
             Chest* GetChest();

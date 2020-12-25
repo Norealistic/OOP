@@ -5,10 +5,6 @@
 
 namespace Dungeon{
 
-    static Player user;
-    const couple start_point = {1, 15};//для простоты определена одна и та же точка начала уровня
-    //couple current_point = start_point;//текущее местоположение игрока
-
     struct PlayerStatement{
         Player player;
         couple current_point;
@@ -16,53 +12,38 @@ namespace Dungeon{
     };
 
     struct EnemyStatement{
-        Enemy enemy;
+        Enemy* enemy;
         couple current_point;
         level_numbers current_level;
     };
 
-    static struct PlayerStatement User = {user, start_point, LEVEL_1};
-
-    static std::vector <CatacombsLevel> level_list(3);
-    static std::vector <struct EnemyStatement> Level1_enemies;
-    static std::vector <struct EnemyStatement> Level2_enemies;
-    static std::vector <struct EnemyStatement> Level3_enemies;
-
     template <class T>
-        int getNum(T &a){
-            std::cin>>a;
-            if (!std::cin.good()){
-                return -1;
-            }
-            return 1;
-        }
+    int getNum(T &a);
 
-    void StepsMenu(struct PlayerStatement &user);
-    //void StepUp(struct CharacterStatement &user);//шагнуть
+    void StepsMenu(struct PlayerStatement &user, square& map, std::vector <CatacombsLevel> level_list);
     void UpgradeCharacteristicsMenu();
-    void UpgradeCharacteristics(struct PlayerStatement &user);
-    void PotionsMenu(struct PlayerStatement &user);
-    void DoorsMenu(struct PlayerStatement &user);
-    void WeaponMenu(struct PlayerStatement &user);
-    void ArmorMenu(struct PlayerStatement &user);
-    void PlayerInfo(struct PlayerStatement &user);
-    void StepUp(struct PlayerStatement &user);
-    void StepDown(struct PlayerStatement &user);
-    void StepRight(struct PlayerStatement &user);
-    void StepLeft(struct PlayerStatement &user);
-    void ChangeArmor(struct PlayerStatement &user);
-    void ChangeWeapon(struct PlayerStatement &user);
-    void DrinkPotion(struct PlayerStatement &user);
-    void AttackEmeny(struct PlayerStatement &user, struct EnemyStatement &enemy);
-    void GetItem(struct PlayerStatement &user);
-    void OpenChest(struct PlayerStatement &user);
-        void OpenDoor(struct PlayerStatement &user);
-        void CloseDoor(struct PlayerStatement &user);
-        void GoUpstairs(struct PlayerStatement &user);
-        void GoDownstairs(struct PlayerStatement &user);
-        void MakeStep(struct PlayerStatement &user);
-
-        void InitLevels();
-        void UploadCharacters(CatacombsLevel& level);
+    void UpgradeCharacteristics(struct PlayerStatement &user, square& map, std::vector <CatacombsLevel> level_list);
+    void PotionsMenu(struct PlayerStatement &user, square& map, std::vector <CatacombsLevel> level_list);
+    void DoorsMenu(struct PlayerStatement &user, square& map, std::vector <CatacombsLevel> level_list);
+    void WeaponMenu(struct PlayerStatement &user, square& map, std::vector <CatacombsLevel> level_list);
+    void ArmorMenu(struct PlayerStatement &user, square& map, std::vector <CatacombsLevel> level_list);
+    void PlayerInfo(struct PlayerStatement &user, square& map, std::vector <CatacombsLevel> level_list);
+    void StepUp(struct PlayerStatement &user, square& map, std::vector <CatacombsLevel> level_list, int number);
+    void StepDown(struct PlayerStatement &user, square& map, std::vector <CatacombsLevel> level_list, int number);
+    void StepRight(struct PlayerStatement &user, square& map, std::vector <CatacombsLevel> level_list, int number);
+    void StepLeft(struct PlayerStatement &user, square& map, std::vector <CatacombsLevel> level_list, int number);
+    void DrinkPotion(struct PlayerStatement &user, square& map, std::vector <CatacombsLevel> level_list);
+    void AttackEmeny(struct PlayerStatement &user, struct EnemyStatement &enemy, square& map, std::vector <CatacombsLevel> level_list);
+    void GetItem(struct PlayerStatement &user, square& map, std::vector <CatacombsLevel> level_list);
+    void OpenChest(struct PlayerStatement &user, square& map, std::vector <CatacombsLevel>& level_list);
+    void OpenDoor(struct PlayerStatement &user, square& map, std::vector <CatacombsLevel> level_list);
+    void CloseDoor(struct PlayerStatement &user, square& map, std::vector <CatacombsLevel> level_list);
+    bool GoUpstairs(struct PlayerStatement &user, square& map, std::vector <CatacombsLevel> level_list, couple& start_point, std::vector <std::vector <struct EnemyStatement>>& Level_enemies);
+    void GoDownstairs(struct PlayerStatement &user, square& map, std::vector <CatacombsLevel> level_list, couple& start_point, std::vector <std::vector <struct EnemyStatement>>& Level_enemies);
+    void ThroughTheDoor(struct PlayerStatement &user, square& map, std::vector <CatacombsLevel> level_list);
+    bool MakeStep(struct PlayerStatement &user, square& map, std::vector <CatacombsLevel> level_list, std::vector <std::vector <struct EnemyStatement>>& Level_enemies);
+    void InitLevels(level_numbers level, square& map, std::vector <CatacombsLevel>& level_list);
+    void UploadCharacters(struct PlayerStatement &user, level_numbers level, square& map, std::vector <CatacombsLevel> level_list, std::vector <std::vector <struct EnemyStatement>>& Level_enemies);
+    void Output(square& map);
 }
 

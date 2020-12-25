@@ -11,6 +11,8 @@ namespace Dungeon{
          
              Artefact(){
                  this->SetName(ARTEFACT);
+                 characteristic health = {HEALTH, 0, 0};
+                 this->modificators.push_back(health);
              }
          
              std::vector <characteristic> GetModificators(){
@@ -22,7 +24,9 @@ namespace Dungeon{
              }
              
              void ClearModificators(){
+                 if (this->modificators.size() > 0)
                  this->modificators.clear();
+                 else throw std::invalid_argument("out of array");
              }
              
              void DeleteModificator(unsigned int pos){
