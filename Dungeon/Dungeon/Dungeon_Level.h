@@ -7,6 +7,8 @@
 #include <time.h>
 #include <cmath>
 
+
+
 namespace Dungeon{
      class CatacombsLevel{
      private:

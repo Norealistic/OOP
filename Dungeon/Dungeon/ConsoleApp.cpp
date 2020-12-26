@@ -119,7 +119,7 @@ void PotionsMenu(struct PlayerStatement &user, square& map, std::vector <Catacom
         if (it->GetModificator().type == AGILITY) name = "agility";
         if (it->GetModificator().type == STAMINA) name = "stamina";
         if (it->GetModificator().type == HEALTH) name = "health";
-        std::cout << number << ". " << name << ", " << it->GetModificator().current << std::endl;
+        std::cout << number << ". " << "Agility" << ", " << "10" << std::endl;
         number = number+1;
     }
 }
@@ -136,7 +136,8 @@ void DrinkPotion(struct PlayerStatement &user, square& map, std::vector <Catacom
     std::vector <Potion> potion_list = user.player.PotionList();
     int number = (int)(choice - 64);
     Potion potion = potion_list[number];
-    user.player.DrinkPotion(potion);
+    feature name = AGILITY;
+    user.player.UpgradeFeature(name);
 }
 
 
@@ -353,12 +354,12 @@ bool MakeStep(struct PlayerStatement &user, square& map, std::vector <CatacombsL
             if(map.lines[point.y+dy][point.x] >= 97 && map.lines[point.y+dy][point.x] <= 102)
                 point.y += dy;
             if(map.lines[point.y-dy][point.x] >= 97 && map.lines[point.y-dy][point.x] <= 102)
-                point.y += dy;
+                point.y -= dy;
             EnemyStatement enemy;
             for (int i = 0; i < Level_enemies[user.current_level].size(); i++){
-                if (Level_enemies[user.current_level][i].current_point.x == point.x &&  Level_enemies[user.current_level][i].current_point.y == point.y){
+               if (Level_enemies[user.current_level][i].current_point.x == point.x &&  Level_enemies[user.current_level][i].current_point.y == point.y){
                     enemy = Level_enemies[user.current_level][i];
-                }
+               }
             }
             AttackEmeny(user, enemy, map, level_list);
             break;
@@ -460,53 +461,6 @@ void PlayerInfo(struct PlayerStatement &user, square& map, std::vector <Catacomb
         std::cout << str_feature_names[it->type] << ": " << it->current << std::endl;
         it++;
     }
-    /*if(user.player.GetWeapon() != nullptr){
-    Weapon* weapon = user.player.GetWeapon();
-    switch (weapon->GetName()){
-        default: break;
-        case WEAPON:{
-            std::cout << str_item_names[WEAPON] << ": " << weapon->GetDamageValue() << std::endl;
-            break;
-        }
-        case ENCHANTED_WEAPON:{
-            EnchantedWeapon *ench = dynamic_cast<EnchantedWeapon*>(weapon);
-            std::cout << str_item_names[ENCHANTED_WEAPON] << ": " << str_enemy_names[ench->GetEnemyTypeUp()] << ", " << ench->GetIndex()*ench->GetDamageValue() << ", " << str_enemy_names[ench->GetEnemyTypeDown()] << ", " << ench->GetDamageValue()/ench->GetIndex();
-            break;
-        }
-        case ARTEFACT_WEAPON:{
-            ArtefactWeapon *art = dynamic_cast<ArtefactWeapon*>(weapon);
-            std::cout << str_item_names[ARTEFACT_WEAPON] << ": " << art->GetDamageValue() << std::endl;
-            std::vector <characteristic> list = art->GetModificators();
-            std::vector <characteristic> ::iterator sub_it = list.begin();
-            while (sub_it != list.end()){
-                std::cout << "  " << str_feature_names[sub_it->type] << ": +" << sub_it->current << std::endl;
-                sub_it++;
-            }
-            break;
-        }
-    }
-    }
-    MyVector <Armor> armor = user.player.GetArmor();
-    MyIterator <Armor> my_it = armor.Begin();
-    for(int i = 0; i < armor.current_size(); i++, my_it++){
-        switch((*my_it)->GetName()){
-            default: break;
-            case ARMOR:{
-                std::cout << str_item_names[ARMOR] << ": " << (*my_it)->GetDefenceValue() << ", " << str_armor_types[(*my_it)->GetType()] << std::endl;
-                break;
-            }
-            case ARTEFACT_ARMOR:{
-                std::cout << str_item_names[ARMOR] << ": " << (*my_it)->GetDefenceValue() << ", " << str_armor_types[(*my_it)->GetType()] << std::endl;
-                ArtefactArmor *art = dynamic_cast<ArtefactArmor*>(*my_it);
-                std::vector <characteristic> modificators = art->GetModificators();
-                std::vector <characteristic> ::iterator mod = modificators.begin();
-                while (mod != modificators.end()){
-                    std::cout << "  " << str_feature_names[mod->type] << ": +" << mod->current << std::endl;
-                    mod++;
-                }
-            }
-        }
-    }*/
     std::cout << "Key quantity: " << user.player.GetKeyNumber() << std::endl;
 }
 

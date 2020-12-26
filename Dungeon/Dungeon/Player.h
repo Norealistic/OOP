@@ -11,7 +11,6 @@ namespace Dungeon{
         MyVector <Armor> armor;
         std::vector <Potion> potions;
         const unsigned int potion_number = 5;
-        //unsigned int max_item_number;
         unsigned int key_nember;
         unsigned int DamageBonus(Enemy& enemy);
         unsigned int DefenceBonus();

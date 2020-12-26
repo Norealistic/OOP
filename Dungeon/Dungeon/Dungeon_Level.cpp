@@ -101,50 +101,50 @@ namespace Dungeon {
                                 chest->SetLevelNumber((unsigned int)this->level_number);
                                 chest->SetNumber(rand()%(int)(this->level_number + 1));
                                 item_names name = POTION;
-                                /*do{
+                                do{
                                     name = (item_names)(rand()%8 + 2);
-                                }while (name == ARTEFACT);*/
+                                }while (name == ARTEFACT);
                                 switch(name){
                                     default:{
                                         Keychain* keychain = new Keychain();
                                         chest->SetItem(keychain);
-                                        //keychain->~Keychain();
+                                        keychain->~Keychain();
                                         break;
                                     }
                                     case ARMOR:{
                                         Armor* armor = new Armor();
                                         chest->SetItem(armor);
-                                        //armor->~Armor();
+                                        armor->~Armor();
                                         break;
                                     }
                                     case ARTEFACT_ARMOR:{
                                         ArtefactArmor *artefact_armor = new ArtefactArmor();
                                         chest->SetItem(artefact_armor);
-                                        //artefact_armor->~ArtefactArmor();
+                                        artefact_armor->~ArtefactArmor();
                                         break;
                                     }
                                     case WEAPON:{
                                         Weapon *weapon = new Weapon();
                                         chest->SetItem(weapon);
-                                        //weapon->~Weapon();
+                                        weapon->~Weapon();
                                         break;
                                     }
                                     case ARTEFACT_WEAPON:{
                                         ArtefactWeapon *artefact_weapon = new ArtefactWeapon();
                                         chest->SetItem(artefact_weapon);
-                                        //artefact_weapon->~ArtefactWeapon();
+                                        artefact_weapon->~ArtefactWeapon();
                                         break;
                                     }
                                     case ENCHANTED_WEAPON:{
                                         EnchantedWeapon *ench_weapon = new EnchantedWeapon();
                                         chest->SetItem(ench_weapon);
-                                        //ench_weapon->~EnchantedWeapon();
+                                        ench_weapon->~EnchantedWeapon();
                                         break;
                                     }
                                     case POTION:{
                                         Potion *potion = new Potion();
                                         chest->SetItem(potion);
-                                        //potion->~Potion();
+                                        potion->~Potion();
                                         break;
                                     }
                                 }
@@ -167,12 +167,10 @@ namespace Dungeon {
                                 break;
                             }
                     }
-                    //j++;
                     if (map.lines[i][j] >= 97 && map.lines[i][j] <= 102){
                         this->case_array[i][j] = Case(ENEMY, point);
                     }
                 }
-                //i++;
             }
         }
 

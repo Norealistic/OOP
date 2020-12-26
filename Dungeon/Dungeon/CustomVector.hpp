@@ -14,11 +14,11 @@ namespace Dungeon {
 template <class T>
 class MyVector{
     private:
-        T *array;         ///<Массив значений
-        const static unsigned int size = 4;  ///<Максимальный размер вектора
+        T *array;         ///< Массив значений
+        const static unsigned int size = 4;  ///< Максимальный размер вектора
         unsigned int currentsize; ///<Текущий размер вектора
     public:
-        MyVector() : array(nullptr), currentsize(0) {} ///<Инициализирующий коструктор
+        MyVector() : array(nullptr), currentsize(0) {} ///< Инициализирующий коструктор
      
      /*!
       Деструктор
@@ -28,9 +28,17 @@ class MyVector{
             delete[] array;
             currentsize = 0;
         }
-        
-        static unsigned int const_size(){return size;}  ///<Возвращает максимальный размер вектора
-        unsigned int current_size(){return currentsize;} ///<Возвращает текущий размер вектора
+    
+        /*!
+           Метод для определения максимальной длины вектора
+           \return Максимальную длину
+          */
+        static unsigned int const_size(){return size;}
+    /*!
+        Метод для определения текущей длины вектора
+        \return Текущую длину
+    */
+        unsigned int current_size(){return currentsize;} ///< Возвращает текущий размер вектора
     
     /*!
         Перегруженный оператор неравенста
@@ -50,6 +58,7 @@ class MyVector{
     
     /*!
            Метод, возвращаюций итератор, который указывает на первый элемент массива
+        \return Итератор, указывающий на первый элемент
        */
     
     MyIterator <T> &Begin(){
@@ -59,6 +68,7 @@ class MyVector{
     
     /*!
         Метод, возвращаюций итератор, который указывает на последний элемент массива
+        \return Итератор, указывающий на последний элемент
     */
     
     MyIterator <T> &End(){
@@ -69,20 +79,22 @@ class MyVector{
     /*!
         Конструктор, инициализирующий текущую длину вектора
      \param new_size {текущая длина вектора}
-    */
+     \throw std::out_of_range В случае если текущая длина вектора больше максимального
+     */
 
     MyVector(const unsigned int new_size){
         if (new_size <= size){
             array(new T[new_size]);
             currentsize(0);
         }
-        else throw std::exception();
+        else throw std::out_of_range("Too big");
     }
 
     /*!
-           Конструктор, инициализирующий текущий вектор в сооствествии с указанным вектором
+    Конструктор, инициализирующий текущий вектор в сооствествии с указанным вектором
      \param new_array {инициализирующий вектор}
-       */
+     \throw std::out_of_range В случае если текущая длина вектора больше максимального
+    */
     
     MyVector(const T *new_array){
         unsigned int arr_size = _msize(new_array)/sizeof(T);
@@ -92,17 +104,18 @@ class MyVector{
                 array[i] = new_array[i];
             currentsize(arr_size);
         }
-        else throw std::exception();
+        else throw std::out_of_range("Too big");
     }
 
 /*!
 Перегруженный оператор взятия элемента массива
  \param index {индекс элемента}
-          */
+ \throw std::out_of_range В случае если индекс элемента  больше максимального
+*/
     
     T& operator[](const unsigned int index){
         if (index > currentsize)
-            throw std::exception();
+            throw std::out_of_range("Ellement is non-existent");
         else
             return array[index];
     }
@@ -124,6 +137,7 @@ class MyVector{
 
     /*!
     Метод, удаляющий последний элемент вектора
+     \throw std::out_of_range В случае, если вектор пустой
     */
     
     void Pop_back(){
@@ -135,12 +149,13 @@ class MyVector{
             array = p;
             currentsize--;
         }
-        else throw std::exception();
+        else throw std::out_of_range("Empty");
     }
 
     /*!
     Метод, удаляющий элемент по индексу в массиве
      \param index {индекс элемента}
+      \throw std::out_of_range В случае если индекс элемента  больше максимального
     */
 
     
